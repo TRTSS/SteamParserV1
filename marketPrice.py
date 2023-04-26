@@ -16,8 +16,8 @@ from handle_http_429_errors import (
     wait_for_retry_after_header
 )
 
-# socks.set_default_proxy(socks.SOCKS5, 'localhost', 9050)
-# socket.socket = socks.socksocket
+socks.set_default_proxy(socks.SOCKS5, 'localhost', 9050)
+socket.socket = socks.socksocket
 
 httpAuth = settings.credentials.authorize(httplib2.Http())
 service = discovery.build('sheets', 'v4', http=httpAuth)
