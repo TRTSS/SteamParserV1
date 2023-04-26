@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import re
 import settings
 
-socks.set_default_proxy(socks.SOCKS5, 'localhost', 9150)
+socks.set_default_proxy(socks.SOCKS5, 'localhost', 9050)
 socket.socket = socks.socksocket
 
 httpAuth = settings.credentials.authorize(httplib2.Http())
