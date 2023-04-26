@@ -41,6 +41,9 @@ for item in values[1:]:
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     itemId = re.findall(r'Market_LoadOrderSpread\(\s*(\d+)\s*\)', str(r.content))
+    if len(itemId) == 0:
+        prices.append(['-', '-', '-', 500])
+        break
 
     apiURL = f'https://steamcommunity.com/market/itemordershistogram?country=RU&language=russian&currency=5&item_nameid={itemId[0]}&two_factor=0'
     r = requests.get(apiURL)
