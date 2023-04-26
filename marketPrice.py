@@ -22,7 +22,7 @@ def checkIP():
     return soup.find('body').text
 
 
-print(f"Request IP: {checkIP()}")
+print(f"{checkIP()}")
 
 ranges = ['First list!B:B']
 res = service.spreadsheets().values().batchGet(
@@ -36,6 +36,7 @@ values = res['valueRanges'][0]['values']
 
 prices = []
 for item in values[1:]:
+    print(f"{checkIP()}")
     url = item[0]
 
     r = requests.get(url)
