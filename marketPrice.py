@@ -1,5 +1,6 @@
 import json
-
+import socket
+import socks
 import httplib2
 from apiclient import discovery
 from oauth2client.service_account import ServiceAccountCredentials
@@ -8,8 +9,20 @@ from bs4 import BeautifulSoup
 import re
 import settings
 
+socks.set_default_proxy(socks.SOCKS5, 'localhost', 9150)
+socket.socket = socks.socksocket
+
 httpAuth = settings.credentials.authorize(httplib2.Http())
 service = discovery.build('sheets', 'v4', http=httpAuth)
+
+
+def checkIP():
+    ip = requests.get('http://checkip.dyndns.org').content
+    soup = BeautifulSoup(ip, 'html.parser')
+    return soup.find('body').text
+
+
+print(f"Request IP: {checkIP()}")
 
 ranges = ['First list!B:B']
 res = service.spreadsheets().values().batchGet(
@@ -20,22 +33,18 @@ res = service.spreadsheets().values().batchGet(
 ).execute()
 
 values = res['valueRanges'][0]['values']
-print(values[1:])
 
 prices = []
 for item in values[1:]:
-    print(item[0])
     url = item[0]
 
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     itemId = re.findall(r'Market_LoadOrderSpread\(\s*(\d+)\s*\)', str(r.content))
-    print(itemId)
 
     apiURL = f'https://steamcommunity.com/market/itemordershistogram?country=RU&language=russian&currency=5&item_nameid={itemId[0]}&two_factor=0'
     r = requests.get(apiURL)
     data = json.loads(r.text)
-    print(data)
 
     if data is None:
         highest_buy = "Не торгуется"
