@@ -16,8 +16,8 @@ from handle_http_429_errors import (
     wait_for_retry_after_header
 )
 
-socks.set_default_proxy(socks.SOCKS5, 'localhost', 9050)
-socket.socket = socks.socksocket
+# socks.set_default_proxy(socks.SOCKS5, 'localhost', 9050)
+# socket.socket = socks.socksocket
 
 httpAuth = settings.credentials.authorize(httplib2.Http())
 service = discovery.build('sheets', 'v4', http=httpAuth)
@@ -58,17 +58,17 @@ def GetData(url, itemId):
     http = urllib3.PoolManager()
     apiURL = f'https://steamcommunity.com/market/itemordershistogram?country=RU&language=russian&currency=5&item_nameid={itemId[0]}&two_factor=0'
     r = http.request('GET', apiURL)
-    data = json.loads(r.data)
+    print(r.data)
 
-    if data is None:
-        highest_buy = "Не торгуется"
-        lower_sell = "Не торгуется"
-    else:
-        highest_buy = int(data['highest_buy_order']) / 100
-        lower_sell = int(data['lowest_sell_order']) / 100
+    # if data is None:
+    #     highest_buy = "Не торгуется"
+    #     lower_sell = "Не торгуется"
+    # else:
+    #     highest_buy = int(data['highest_buy_order']) / 100
+    #     lower_sell = int(data['lowest_sell_order']) / 100
 
     # prices.append([highest_buy, lower_sell, itemId[0], r.status_code, r.reason])
-    return [highest_buy, lower_sell, itemId[0]]
+    # return [highest_buy, lower_sell, itemId[0]]
 
 
 print(f"{checkIP()}")
