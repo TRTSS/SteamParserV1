@@ -43,7 +43,7 @@ for item in values[1:]:
     soup = BeautifulSoup(r.text, 'html.parser')
     itemId = re.findall(r'Market_LoadOrderSpread\(\s*(\d+)\s*\)', str(r.content))
     if len(itemId) == 0:
-        prices.append(['-', '-', '-', r.status_code])
+        prices.append(['-', '-', '-', r.status_code, r.reason])
         continue
 
     apiURL = f'https://steamcommunity.com/market/itemordershistogram?country=RU&language=russian&currency=5&item_nameid={itemId[0]}&two_factor=0'
@@ -57,7 +57,7 @@ for item in values[1:]:
         highest_buy = int(data['highest_buy_order']) / 100
         lower_sell = int(data['lowest_sell_order']) / 100
 
-    prices.append([highest_buy, lower_sell, itemId[0], r.status_code])
+    prices.append([highest_buy, lower_sell, itemId[0], r.status_code, r.reason])
 
 res = service.spreadsheets().values().batchUpdate(
     spreadsheetId=settings.spreadsheetId,
@@ -65,7 +65,7 @@ res = service.spreadsheets().values().batchUpdate(
         'valueInputOption': 'USER_ENTERED',
         'data': [
             {
-                'range': f'First list!C2:F{1 + len(prices)}',
+                'range': f'First list!C2:G{1 + len(prices)}',
                 'majorDimension': 'ROWS',
                 'values': prices
             }
