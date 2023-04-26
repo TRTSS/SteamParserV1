@@ -53,7 +53,7 @@ def GetItemId(url):
 )
 def GetData(url, itemId):
     if len(itemId) == 0:
-        prices.append(['-', '-', '-'])
+        return ['-', '-', '-']
 
     http = urllib3.PoolManager()
     apiURL = f'https://steamcommunity.com/market/itemordershistogram?country=RU&language=russian&currency=5&item_nameid={itemId[0]}&two_factor=0'
